@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/controle.css">
+
+    <title>EasyLibrary</title>
+</head>
+
+<body>
+
+<header>
+    <h1>EasyLibrary</h1>
+    <p>Monitoramento de Temperatura e Umidade</p>
+</header>
+
+<main>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Bibliotecas Monitoradas</h3>
+            <p>1</p>
+        </div>
+
+        <div class="card">
+            <h3>Temperatura Média</h3>
+            <p>21°C</p>
+        </div>
+
+        <div class="card">
+            <h3>Umidade Média</h3>
+            <p>50%</p>
+        </div>
+
+        <div class="card">
+            <h3>Alertas</h3>
+            <p>2</p>
+        </div>
+
+    </div>
+
+    <h2>Últimas Leituras</h2>
+
+    <table>
+
+        <thead>
+            <r>
+                <th>Biblioteca</th>
+                <th>Temperatura</th>
+                <th>Umidade</th>
+                <th>Status</th>
+                <th>Data/Hora</th>
+            </tr>
+        </thead>
+
+        <tbody id="corpoTabela">
+        </tbody>
+
+    </table>
+
+</main>
+
+<script>
+
+    buscarLeituras();
+
+    function buscarLeituras() {
+
+        fetch("/leitura/listar")
+            .then(function(resposta) {
+                return resposta.json();
+            })
+            .then(function(dados) {
+                let tabela = document.getElementById("corpoTabela");
+                tabela.innerHTML = "";
+
+                for (let i = 0; i < dados.length; i++) {
+                    let leitura = dados[i];
+                    let classeStatus = "";
+                    
+                    if (leitura.statusLeitura == "Normal") {
+                        classeStatus = "status-normal";
+                    } else if (
+                        leitura.statusLeitura == "Atencao" ||
+                        leitura.statusLeitura == "Atenção"
+                    ) {
+                        classeStatus = "status-atencao";
+                    } else {
+                        classeStatus = "status-critico";
+                    }
+
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${leitura.biblioteca}</td>
+                            <td>${leitura.temperatura}°C</td>
+                            <td>${leitura.umidade}%</td>
+                            <td class="${classeStatus}">
+                                ${leitura.statusLeitura}
+                            </td>
+                            <td>${leitura.dataHora}</td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(function(erro) {
+                console.log("Erro ao buscar leituras:", erro);
+            });
+
+    }
+
+</script>
+
+</body>
+</html>

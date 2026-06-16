@@ -56,9 +56,23 @@ create table medida (
 	FOREIGN KEY (fk_aquario) REFERENCES aquario(id)
 );
 
+CREATE TABLE leitura (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    biblioteca VARCHAR(100) NOT NULL,
+    temperatura DECIMAL(5,2) NOT NULL,
+    umidade DECIMAL(5,2) NOT NULL,
+    statusLeitura VARCHAR(20) NOT NULL,
+    dataHora DATETIME NOT NULL
+);
+
 insert into empresa (razao_social, codigo_ativacao) values ('Empresa 1', 'ED145B');
 insert into empresa (razao_social, codigo_ativacao) values ('Empresa 2', 'A1B2C3');
 insert into aquario (descricao, fk_empresa) values ('Aquário de Estrela-do-mar', 1);
 insert into aquario (descricao, fk_empresa) values ('Aquário de Peixe-dourado', 2);
+insert into leitura (biblioteca, temperatura, umidade, statusLeitura, dataHora) values
+('Corredor Central', 20, 48, 'Normal', '2026-06-16 14:00:00'),
+('Corredor Direita', 25, 60, 'Atencao', '2026-06-16 14:05:00'),
+('Corredor Esquerda', 29, 70, 'Critico', '2026-06-16 14:10:00');
+
 
 alter table usuario add column cpf char(11);
