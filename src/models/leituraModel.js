@@ -1,7 +1,7 @@
 var database = require("../database/config");
 
 function listar() {
-    const sql = `
+    var instrucaoSql = `
         SELECT
             biblioteca,
             temperatura,
@@ -9,10 +9,10 @@ function listar() {
             statusLeitura,
             DATE_FORMAT(dataHora, '%d/%m/%Y %H:%i') AS dataHora
         FROM leitura
-        ORDER BY dataHora DESC
+        ORDER BY dataHora DESC;
     `;
 
-    return database.query(sql);
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
